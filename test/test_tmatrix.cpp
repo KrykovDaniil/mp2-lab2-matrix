@@ -2,6 +2,26 @@
 
 #include <gtest.h>
 
+class TestMatrix : public ::testing::Test {
+protected:
+  TMatrix<int> m1;
+  TMatrix<int> m2;
+  TMatrix<int> m3;
+
+public:
+  TestMatrix() : m1(10), m2(10), m3(10) {
+    for (int i = 0; i < m1.GetSize(); i++)
+		for (int j=i; j < m1.GetSize(); j++)
+		m1[i][j] = 5;
+	for (int i = 0; i < m1.GetSize(); i++)
+		for (int j=i; j < m1.GetSize(); j++)
+		m2[i][j] = 5;
+	for (int i = 0; i < m1.GetSize(); i++)
+		for (int j=i; j < m1.GetSize(); j++)
+		m3[i][j] = 10;
+  }
+  ~TestMatrix() {}
+}
 TEST(TMatrix, can_create_matrix_with_positive_length)
 {
   ASSERT_NO_THROW(TMatrix<int> m(5));
@@ -27,6 +47,7 @@ TEST(TMatrix, can_create_copied_matrix)
 TEST(TMatrix, copied_matrix_is_equal_to_source_one)
 {
 	TMatrix<int> m1(5);
+		m1[i][j] = 5;
 	m1[1][1] = 4;
 	TMatrix<int> m2(m1);
 	EXPECT_EQ(m1, m2);
@@ -137,7 +158,7 @@ TEST(TMatrix, can_add_matrices_with_equal_size)
 	EXPECT_EQ(m3[1][1], 6);
 }
 
-TEST(TMatrix, cant_add_matrices_with_not_equal_size)
+TEST_F(TestMatrix, cant_add_matrices_with_not_equal_size)
 {
 	TMatrix<int> m1(5);
 	TMatrix<int> m2(6);
@@ -151,10 +172,10 @@ TEST(TMatrix, can_subtract_matrices_with_equal_size)
 	TMatrix<int> m2(5);
 	m2[1][1] = 3;
 	TMatrix<int> m3(m1 - m2);
-	EXPECT_EQ(m3[1][1], 0);
+	EXPECT_EQ(0, m3[1][1]);
 }
 
-TEST(TMatrix, cant_subtract_matrixes_with_not_equal_size)
+TEST_F(TestMatrix, cant_subtract_matrixes_with_not_equal_size)
 {
 	TMatrix<int> m1(5);
 	TMatrix<int> m2(6);
